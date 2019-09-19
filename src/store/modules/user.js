@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { login, getInfo, logout } from '@/api/login'
+import { retrieveMenus } from '@/api/common'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
@@ -91,6 +92,13 @@ const user = {
           commit('SET_ROLES', [])
           Vue.ls.remove(ACCESS_TOKEN)
         })
+      })
+    },
+
+    // 获取菜单
+    RetrieveMenus ({ commit }) {
+      return new Promise((resolve, reject) => {
+        retrieveMenus({ 'Code': 'P0001' }).then(resolve).catch(reject)
       })
     }
 
