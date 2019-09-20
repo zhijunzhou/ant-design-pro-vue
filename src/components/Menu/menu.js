@@ -99,10 +99,10 @@ export default {
       return null
     },
     renderMenuItem (menu) {
-      const target = menu.meta.target || null
-      const tag = target && 'a' || 'router-link'
+      // const target = menu.meta.target || null
+      const tag = 'a'
       const props = { to: { name: menu.name } }
-      const attrs = { href: menu.path, target: menu.meta.target }
+      const attrs = { href: '/#' + menu.path, target: menu.meta.target }
 
       if (menu.children && menu.hideChildrenInMenu) {
         // 把有子菜单的 并且 父菜单是要隐藏子菜单的
