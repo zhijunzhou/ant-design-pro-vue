@@ -9,7 +9,7 @@
     <a-spin :spinning="spinning">
       <s-menu
         :collapsed="collapsed"
-        :menu="configMenus"
+        :menu="menus"
         :theme="theme"
         :mode="mode"
         @select="onSelect"
@@ -23,7 +23,6 @@
 <script>
 import Logo from '@/components/tools/Logo'
 import SMenu from './index'
-import { mapActions } from 'vuex'
 import { mixin, mixinDevice } from '@/utils/mixin'
 
 export default {
@@ -61,66 +60,7 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
-      configMenus: []
-    }
-  },
-  created () {
-    this.RetrieveMenus().then(response => {
-      if (response && response.result.code === 'success') {
-        const tree = this.getTree(response.result.data.subnodes)
-        this.configMenus = tree
-      }
-    })
-  },
   methods: {
-    ...mapActions(['RetrieveMenus']),
-    getTree (tree) {
-      if (Array.isArray(tree)) {
-        return tree.map(item => {
-          return {
-            path: this.getPath(item),
-            name: `workspace${item.level}${item.code}`,
-            component: () => import('@/views/dashboard/Workplace'),
-            meta: this.getMeta(item),
-            children: this.getChildren(item)
-          }
-        })
-      }
-    },
-    getPath (item) {
-      const code = item.code.replace(/\./g, '')
-      return `s${item.level}-l${code}`
-    },
-    getChildren (item) {
-      if (item.level === 4) {
-        return undefined
-      }
-      if (item.subnodes && item.subnodes.length > 0) {
-        if (item.subnodes.filter(it => it.displaytype !== '6').length) {
-          return this.getTree(item.subnodes)
-        }
-      }
-      return undefined
-    },
-    getMeta (item) {
-      if (item.level === 1) {
-        return {
-          title: item.title,
-          keepAlive: true,
-          hiddenHeaderContent: true,
-          hidden: item.displaytype === '6',
-          icon: 'profile'
-        }
-      }
-      return {
-        title: item.title,
-        keepAlive: true,
-        hidden: item.displaytype === '6',
-        hiddenHeaderContent: true
-      }
-    },
     onSelect (obj) {
       this.$emit('menuSelect', obj)
     }
