@@ -19,17 +19,16 @@
       ></side-menu>
     </a-drawer>
 
-    <a-spin :spinning="spinning" v-else-if="isSideMenu()">
-      <side-menu
-        mode="inline"
-        :menus="menus"
-        :spinning="spinning"
-        :theme="navTheme"
-        :collapsed="collapsed"
-        :collapsible="true"
-        @menuSelect="menuSelect"
-      ></side-menu>
-    </a-spin>
+    <side-menu
+      v-else-if="isSideMenu()"
+      mode="inline"
+      :menus="menus"
+      :spinning="spinning"
+      :theme="navTheme"
+      :collapsed="collapsed"
+      :collapsible="true"
+      @menuSelect="menuSelect"
+    ></side-menu>
 
     <a-layout :class="[layoutMode, `content-width-${contentWidth}`]" :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }">
       <!-- layout header -->
@@ -90,6 +89,9 @@ export default {
       production: config.production,
       collapsed: false,
       spinning: false,
+      isDir: false,
+      isEmpty: false,
+      selectedKey: undefined,
       menus: []
     }
   },
@@ -117,7 +119,6 @@ export default {
     this.spinning = true
     this.RetrieveMenus().then(response => {
       this.spinning = false
-      console.log(response)
       if (response && response.result.code === 'success') {
         const tree = this.getTree(response.result.data.subnodes)
         // this.configMenus = tree
@@ -207,12 +208,24 @@ export default {
         if (params) {
           if (params.key) {
             // 选中的是菜单
-          } else {
+            this.isDir = false
+            this.isEmpty = false
+          } else if (params.selectedKeys.length > 0) {
             // 选中的是目录
+            this.isDir = true
+            this.isEmpty = false
+          } else {
+            // 选中的是空目录
+            this.isDir = true
+            this.isEmpty = true
           }
         }
         console.log(params)
       }
+    },
+    findData (key) {
+      const arr = key.split('-')
+      console.log(arr)
     },
     drawerClose () {
       this.collapsed = false

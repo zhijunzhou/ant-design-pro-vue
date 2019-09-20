@@ -6,13 +6,16 @@
     v-model="collapsed"
     :trigger="null">
     <logo />
-    <s-menu
-      :collapsed="collapsed"
-      :menu="configMenus"
-      :theme="theme"
-      :mode="mode"
-      @select="onSelect"
-      style="padding: 16px 0px;"></s-menu>
+    <a-spin :spinning="spinning">
+      <s-menu
+        :collapsed="collapsed"
+        :menu="configMenus"
+        :theme="theme"
+        :mode="mode"
+        @select="onSelect"
+        style="padding: 16px 0px;">
+      </s-menu>
+    </a-spin>
   </a-layout-sider>
 
 </template>
@@ -38,6 +41,11 @@ export default {
       required: false,
       default: 'dark'
     },
+    spinning: {
+      type: Boolean,
+      require: false,
+      default: false
+    },
     collapsible: {
       type: Boolean,
       required: false,
@@ -60,7 +68,6 @@ export default {
   },
   created () {
     this.RetrieveMenus().then(response => {
-      console.log(response)
       if (response && response.result.code === 'success') {
         const tree = this.getTree(response.result.data.subnodes)
         this.configMenus = tree
