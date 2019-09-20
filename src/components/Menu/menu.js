@@ -124,8 +124,8 @@ export default {
     },
     handleClick (e) {
       e.preventDefault()
-      const pageid = e.target.parentNode.dataset.href
-      this.$router.push({ path: `/dashboard/workplace/${pageid}` })
+      // const pageid = e.target.parentNode.dataset.href
+      // this.$router.push({ path: `/dashboard/workplace` })
       return false
     },
     renderSubMenu (menu) {
