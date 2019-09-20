@@ -23,14 +23,14 @@ export const asyncRouterMap = [
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
             meta: { title: '工作台', keepAlive: true, hiddenHeaderContent: true, permission: [ 'dashboard' ] }
+          },
+          {
+            path: '/dashboard/workplace/:pageid',
+            name: 'Workplace2',
+            component: () => import('@/views/dashboard/Workplace'),
+            meta: { title: '工作台2', hiddenHeaderContent: true, permission: [ 'dashboard' ] }
           }
         ]
-      },
-
-      {
-        path: '/s*',
-        component: () => import('@/views/dashboard/Workplace'),
-        meta: { title: '统一页面路由', keepAlive: true, hiddenHeaderContent: true, icon: 'profile', permission: [ 'dashboard' ] }
       }
     ]
   }

@@ -100,9 +100,9 @@ export default {
     },
     renderMenuItem (menu) {
       // const target = menu.meta.target || null
-      const tag = 'a'
+      const tag = 'span'
       const props = { to: { name: menu.name } }
-      const attrs = { href: '/#' + menu.path, target: menu.meta.target }
+      const attrs = { href: '/#' + menu.path, 'data-href': menu.path, target: menu.meta.target }
 
       if (menu.children && menu.hideChildrenInMenu) {
         // 把有子菜单的 并且 父菜单是要隐藏子菜单的
@@ -115,12 +115,18 @@ export default {
 
       return (
         <Item {...{ key: menu.path }}>
-          <tag {...{ props, attrs }}>
+          <tag {...{ props, attrs }} onClick={this.handleClick}>
             {this.renderIcon(menu.meta.icon)}
             <span>{menu.meta.title}</span>
           </tag>
         </Item>
       )
+    },
+    handleClick (e) {
+      e.preventDefault()
+      const pageid = e.target.parentNode.dataset.href
+      this.$router.push({ path: `/dashboard/workplace/${pageid}` })
+      return false
     },
     renderSubMenu (menu) {
       const itemArr = []

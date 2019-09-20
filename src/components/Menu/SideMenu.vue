@@ -1,7 +1,7 @@
 <template>
   <a-layout-sider
     :class="['sider', isDesktop() ? null : 'shadow', theme, fixSiderbar ? 'ant-fixed-sidemenu' : null ]"
-    width="256px"
+    width="300px"
     :collapsible="collapsible"
     v-model="collapsed"
     :trigger="null">
@@ -84,7 +84,7 @@ export default {
     },
     getPath (item) {
       const code = item.code.replace(/\./g, '')
-      return `/s${item.level}/l${code}`
+      return `s${item.level}-l${code}`
     },
     getChildren (item) {
       if (item.level === 4) {
