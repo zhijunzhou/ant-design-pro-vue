@@ -71,6 +71,7 @@ export default {
       } else {
         this.openKeys = latestOpenKey ? [latestOpenKey] : []
       }
+      this.$emit('select', { selectedKeys: this.openKeys })
     },
     updateMenu () {
       const routes = this.$route.matched.concat()

@@ -23,9 +23,11 @@
       <side-menu
         mode="inline"
         :menus="menus"
+        :spinning="spinning"
         :theme="navTheme"
         :collapsed="collapsed"
         :collapsible="true"
+        @menuSelect="menuSelect"
       ></side-menu>
     </a-spin>
 
@@ -198,9 +200,18 @@ export default {
       }
       return left
     },
-    menuSelect () {
+    menuSelect (params) {
       if (!this.isDesktop()) {
         this.collapsed = false
+      } else {
+        if (params) {
+          if (params.key) {
+            // 选中的是菜单
+          } else {
+            // 选中的是目录
+          }
+        }
+        console.log(params)
       }
     },
     drawerClose () {
