@@ -19,14 +19,15 @@
       ></side-menu>
     </a-drawer>
 
-    <side-menu
-      v-else-if="isSideMenu()"
-      mode="inline"
-      :menus="menus"
-      :theme="navTheme"
-      :collapsed="collapsed"
-      :collapsible="true"
-    ></side-menu>
+    <a-spin :spinning="spinning" v-else-if="isSideMenu()">
+      <side-menu
+        mode="inline"
+        :menus="menus"
+        :theme="navTheme"
+        :collapsed="collapsed"
+        :collapsible="true"
+      ></side-menu>
+    </a-spin>
 
     <a-layout :class="[layoutMode, `content-width-${contentWidth}`]" :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }">
       <!-- layout header -->
@@ -43,7 +44,7 @@
       <a-layout-content :style="{ height: '100%', margin: '24px 24px 0', paddingTop: fixedHeader ? '64px' : '0' }">
         <multi-tab v-if="multiTab"></multi-tab>
         <transition name="page-transition">
-          <route-view />
+          <!-- <route-view /> -->
         </transition>
       </a-layout-content>
 
@@ -70,7 +71,7 @@ import SideMenu from '@/components/Menu/SideMenu'
 import GlobalHeader from '@/components/GlobalHeader'
 import GlobalFooter from '@/components/GlobalFooter'
 import SettingDrawer from '@/components/SettingDrawer'
-import { asyncRouterMap } from '@/config/router.config.js'
+// import { asyncRouterMap } from '@/config/router.config.js'
 
 export default {
   name: 'BasicLayout',
@@ -86,6 +87,7 @@ export default {
     return {
       production: config.production,
       collapsed: false,
+      spinning: false,
       menus: []
     }
   },
@@ -110,7 +112,17 @@ export default {
     }
   },
   created () {
-    this.menus = asyncRouterMap.find((item) => item.path === '/').children
+    this.spinning = true
+    this.RetrieveMenus().then(response => {
+      this.spinning = false
+      console.log(response)
+      if (response && response.result.code === 'success') {
+        const tree = this.getTree(response.result.data.subnodes)
+        // this.configMenus = tree
+        this.menus = tree
+      }
+    })
+    // this.menus = asyncRouterMap.find((item) => item.path === '/').children
     // this.menus = this.mainMenu.find(item => item.path === '/').children
     this.collapsed = !this.sidebarOpened
   },
@@ -126,7 +138,52 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setSidebar']),
+    ...mapActions(['setSidebar', 'RetrieveMenus']),
+    getTree (tree) {
+      if (Array.isArray(tree)) {
+        return tree.map(item => {
+          return {
+            path: this.getPath(item),
+            name: `workspace${item.level}${item.code}`,
+            component: () => import('@/views/dashboard/Workplace'),
+            meta: this.getMeta(item),
+            children: this.getChildren(item)
+          }
+        })
+      }
+    },
+    getPath (item) {
+      const code = item.code.replace(/\./g, '')
+      return `/s${item.level}/l${code}`
+    },
+    getChildren (item) {
+      if (item.level === 4) {
+        return undefined
+      }
+      if (item.subnodes && item.subnodes.length > 0) {
+        if (item.subnodes.filter(it => it.displaytype !== '6').length) {
+          return this.getTree(item.subnodes)
+        }
+      }
+      return undefined
+    },
+    getMeta (item) {
+      if (item.level === 1) {
+        return {
+          title: item.title,
+          keepAlive: true,
+          hiddenHeaderContent: true,
+          hidden: item.displaytype === '6',
+          icon: 'profile'
+        }
+      }
+      return {
+        title: item.title,
+        keepAlive: true,
+        hidden: item.displaytype === '6',
+        hiddenHeaderContent: true
+      }
+    },
     toggle () {
       this.collapsed = !this.collapsed
       this.setSidebar(!this.collapsed)
