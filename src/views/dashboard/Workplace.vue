@@ -10,25 +10,13 @@
             style="margin-bottom: 24px;"
             :bordered="false"
             :title="finalData.title"
-            :body-style="{ padding: 0 }">
+            :body-style="{ padding: 10 }">
             <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
-                <a-card :bordered="false" :body-style="{ padding: 0 }">
-                  <a-card-meta>
-                    <div slot="title" class="card-title">
-                      <a-avatar size="small" :src="item.cover"/>
-                      <a>{{ item.title }}</a>
-                    </div>
-                    <div slot="description" class="card-description">
-                      {{ finalData }}
-                    </div>
-                  </a-card-meta>
-                  <div class="project-item">
-                    <a href="/#/">科学搬砖组</a>
-                    <span class="datetime">9小时前</span>
-                  </div>
-                </a-card>
-              </a-card-grid>
+              <a-table :columns="dataColumns" :dataSource="finalData.data" :pagination="false" bordered>
+                <template slot="name" slot-scope="text">
+                  <a href="javascript:;">{{ text }}</a>
+                </template>
+              </a-table>
             </div>
           </a-card>
           <!-- 当前节点为目录，显示所有目录内容 -->
@@ -70,50 +58,35 @@ export default {
       timeFix: timeFix(),
       avatar: '',
       user: {},
-
       projects: [],
       loading: true,
       radarLoading: true,
-      activities: [],
-      teams: [],
-
-      // data
-      axis1Opts: {
-        dataKey: 'item',
-        line: null,
-        tickLine: null,
-        grid: {
-          lineStyle: {
-            lineDash: null
-          },
-          hideFirstLine: false
-        }
-      },
-      axis2Opts: {
-        dataKey: 'score',
-        line: null,
-        tickLine: null,
-        grid: {
-          type: 'polygon',
-          lineStyle: {
-            lineDash: null
-          }
-        }
-      },
-      scale: [{
-        dataKey: 'score',
-        min: 0,
-        max: 80
+      columns: [{
+        title: 'Name',
+        dataIndex: 'name'
+      }, {
+        title: 'Cash Assets',
+        dataIndex: 'money'
+      }, {
+        title: 'Address',
+        dataIndex: 'address'
       }],
-      axisData: [
-        { item: '引用', a: 70, b: 30, c: 40 },
-        { item: '口碑', a: 60, b: 70, c: 40 },
-        { item: '产量', a: 50, b: 60, c: 40 },
-        { item: '贡献', a: 40, b: 50, c: 40 },
-        { item: '热度', a: 60, b: 70, c: 40 },
-        { item: '引用', a: 70, b: 50, c: 40 }
-      ],
-      radarData: []
+      data: [{
+        key: '1',
+        name: 'John Brown',
+        money: '￥300,000.00',
+        address: 'New York No. 1 Lake Park'
+      }, {
+        key: '2',
+        name: 'Jim Green',
+        money: '￥1,256,000.00',
+        address: 'London No. 1 Lake Park'
+      }, {
+        key: '3',
+        name: 'Joe Black',
+        money: '￥120,000.00',
+        address: 'Sidney No. 1 Lake Park'
+      }]
     }
   },
   computed: {
@@ -127,6 +100,27 @@ export default {
         return true
       }
       return false
+    },
+    dataColumns () {
+      if (Array.isArray(this.finalData.data) && this.finalData.data.length > 0) {
+        const column = this.finalData.data[0]
+        return Object.keys(column).map(k => {
+          return {
+            title: k,
+            dataIndex: k
+          }
+        })
+      }
+      return []
+    },
+    dataSource () {
+      if (Array.isArray(this.finalData.data) && this.finalData.data.length > 0) {
+        return this.finalData.data((item, index) => {
+          item.key = String(index)
+          return item
+        })
+      }
+      return []
     },
     userInfo () {
       return this.$store.getters.userInfo
