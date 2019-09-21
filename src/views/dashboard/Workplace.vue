@@ -12,11 +12,14 @@
             :title="finalData.title"
             :body-style="{ padding: 10 }">
             <div>
-              <a-table :columns="dataColumns" :dataSource="finalData.data" :pagination="false" bordered>
+              <a-table :columns="dataColumns" :dataSource="dataSource" :pagination="false" bordered>
                 <template slot="name" slot-scope="text">
                   <a href="javascript:;">{{ text }}</a>
                 </template>
               </a-table>
+              <template slot="img" slot-scope="img">
+                <img :src="img" width="100" />
+              </template>
             </div>
           </a-card>
           <!-- 当前节点为目录，显示所有目录内容 -->
@@ -43,15 +46,11 @@ import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
 
 import { PageView } from '@/layouts'
-import HeadInfo from '@/components/tools/HeadInfo'
-import { Radar } from '@/components'
 
 export default {
   name: 'Workplace',
   components: {
-    PageView,
-    HeadInfo,
-    Radar
+    PageView
   },
   data () {
     return {
@@ -60,33 +59,7 @@ export default {
       user: {},
       projects: [],
       loading: true,
-      radarLoading: true,
-      columns: [{
-        title: 'Name',
-        dataIndex: 'name'
-      }, {
-        title: 'Cash Assets',
-        dataIndex: 'money'
-      }, {
-        title: 'Address',
-        dataIndex: 'address'
-      }],
-      data: [{
-        key: '1',
-        name: 'John Brown',
-        money: '￥300,000.00',
-        address: 'New York No. 1 Lake Park'
-      }, {
-        key: '2',
-        name: 'Jim Green',
-        money: '￥1,256,000.00',
-        address: 'London No. 1 Lake Park'
-      }, {
-        key: '3',
-        name: 'Joe Black',
-        money: '￥120,000.00',
-        address: 'Sidney No. 1 Lake Park'
-      }]
+      radarLoading: true
     }
   },
   computed: {
@@ -105,17 +78,26 @@ export default {
       if (Array.isArray(this.finalData.data) && this.finalData.data.length > 0) {
         const column = this.finalData.data[0]
         return Object.keys(column).map(k => {
+          if (typeof column[k] === 'string' && column[k].toLowerCase().indexOf('.jpg') !== -1) {
+            return {
+              title: k,
+              dataIndex: k,
+              customRender: (text, row, index) => {
+                return <img src={text} width="100" />
+              }
+            }
+          }
           return {
             title: k,
             dataIndex: k
           }
-        })
+        }).filter(item => item.title !== 'key')
       }
       return []
     },
     dataSource () {
       if (Array.isArray(this.finalData.data) && this.finalData.data.length > 0) {
-        return this.finalData.data((item, index) => {
+        return this.finalData.data.map((item, index) => {
           item.key = String(index)
           return item
         })
@@ -134,6 +116,9 @@ export default {
     this.getProjects()
   },
   methods: {
+    isImg (text) {
+      return (text.indexOf('jpg') !== -1)
+    },
     getProjects () {
       this.$http.get('/list/search/projects')
         .then(res => {
