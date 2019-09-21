@@ -29,7 +29,7 @@
                 <a-list-item-meta>
                   <!-- <a-avatar slot="avatar" /> -->
                   <div slot="title">
-                    <span>{{ item.title }}</span>&nbsp;
+                    <a href="javascript:;" @click="viewChildren(item)">{{ item.title }}</a>&nbsp;
                   </div>
                 </a-list-item-meta>
               </a-list-item>
@@ -43,8 +43,7 @@
 
 <script>
 import { timeFix } from '@/utils/util'
-import { mapState } from 'vuex'
-
+import { mapState, mapActions } from 'vuex'
 import { PageView } from '@/layouts'
 
 export default {
@@ -116,8 +115,11 @@ export default {
     this.getProjects()
   },
   methods: {
-    isImg (text) {
-      return (text.indexOf('jpg') !== -1)
+    ...mapActions(['UpdateFinalData']),
+    viewChildren (item) {
+      if (Array.isArray(item.subnodes) && item.subnodes.length > 0) {
+        this.UpdateFinalData(item)
+      }
     },
     getProjects () {
       this.$http.get('/list/search/projects')
