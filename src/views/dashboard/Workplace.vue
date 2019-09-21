@@ -1,34 +1,16 @@
 <template>
   <page-view :avatar="avatar" :title="false">
-    <div slot="headerContent">
-      <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span></div>
-      <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
-    </div>
-    <div slot="extra">
-      <a-row class="more-info">
-        <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.project')" content="56" :center="false" :bordered="false"/>
-        </a-col>
-        <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.teamRank')" content="8/24" :center="false" :bordered="false"/>
-        </a-col>
-        <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.views')" content="2,223" :center="false" />
-        </a-col>
-      </a-row>
-    </div>
-
     <div>
       <a-row :gutter="24">
-        <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
+        <a-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card
+            v-if="!isDir"
             class="project-list"
             :loading="loading"
             style="margin-bottom: 24px;"
             :bordered="false"
-            title="进行中的项目"
+            :title="finalData.title"
             :body-style="{ padding: 0 }">
-            <a slot="extra">全部项目</a>
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
@@ -49,59 +31,18 @@
               </a-card-grid>
             </div>
           </a-card>
-
-          <a-card :loading="loading" title="动态" :bordered="false">
+          <!-- 当前节点为目录，显示所有目录内容 -->
+          <a-card v-else :loading="loading" :title="finalData.title" :bordered="false">
             <a-list>
-              <a-list-item :key="index" v-for="(item, index) in activities">
+              <a-list-item :key="index" v-for="(item, index) in finalData.subnodes">
                 <a-list-item-meta>
-                  <a-avatar slot="avatar" :src="item.user.avatar" />
+                  <!-- <a-avatar slot="avatar" /> -->
                   <div slot="title">
-                    <span>{{ item.user.nickname }}</span>&nbsp;
-                    在&nbsp;<a href="#">{{ item.project.name }}</a>&nbsp;
-                    <span>{{ item.project.action }}</span>&nbsp;
-                    <a href="#">{{ item.project.event }}</a>
+                    <span>{{ item.title }}</span>&nbsp;
                   </div>
-                  <div slot="description">{{ item.time }}</div>
                 </a-list-item-meta>
               </a-list-item>
             </a-list>
-          </a-card>
-        </a-col>
-        <a-col
-          style="padding: 0 12px"
-          :xl="8"
-          :lg="24"
-          :md="24"
-          :sm="24"
-          :xs="24">
-          <a-card title="快速开始 / 便捷导航" style="margin-bottom: 24px" :bordered="false" :body-style="{padding: 0}">
-            <div class="item-group">
-              <a>操作一</a>
-              <a>操作二</a>
-              <a>操作三</a>
-              <a>操作四</a>
-              <a>操作五</a>
-              <a>操作六</a>
-              <a-button size="small" type="primary" ghost icon="plus">添加</a-button>
-            </div>
-          </a-card>
-          <a-card title="XX 指数" style="margin-bottom: 24px" :loading="radarLoading" :bordered="false" :body-style="{ padding: 0 }">
-            <div style="min-height: 400px;">
-              <!-- :scale="scale" :axis1Opts="axis1Opts" :axis2Opts="axis2Opts"  -->
-              <radar :data="radarData" />
-            </div>
-          </a-card>
-          <a-card :loading="loading" title="团队" :bordered="false">
-            <div class="members">
-              <a-row>
-                <a-col :span="12" v-for="(item, index) in teams" :key="index">
-                  <a>
-                    <a-avatar size="small" :src="item.avatar" />
-                    <span class="member">{{ item.name }}</span>
-                  </a>
-                </a-col>
-              </a-row>
-            </div>
           </a-card>
         </a-col>
       </a-row>
@@ -116,10 +57,6 @@ import { mapState } from 'vuex'
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
-
-import { getRoleList, getServiceList } from '@/api/manage'
-
-const DataSet = require('@antv/data-set')
 
 export default {
   name: 'Workplace',
@@ -185,6 +122,12 @@ export default {
       welcome: (state) => state.user.welcome,
       finalData: (state) => state.user.finalData
     }),
+    isDir () {
+      if (Array.isArray(this.finalData.subnodes) && this.finalData.subnodes.length > 0) {
+        return true
+      }
+      return false
+    },
     userInfo () {
       return this.$store.getters.userInfo
     }
@@ -192,20 +135,9 @@ export default {
   created () {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
-
-    getRoleList().then(res => {
-      // console.log('workplace -> call getRoleList()', res)
-    })
-
-    getServiceList().then(res => {
-      // console.log('workplace -> call getServiceList()', res)
-    })
   },
   mounted () {
     this.getProjects()
-    this.getActivity()
-    this.getTeams()
-    this.initRadar()
   },
   methods: {
     getProjects () {
@@ -213,35 +145,6 @@ export default {
         .then(res => {
           this.projects = res.result && res.result.data
           this.loading = false
-        })
-    },
-    getActivity () {
-      this.$http.get('/workplace/activity')
-        .then(res => {
-          this.activities = res.result
-        })
-    },
-    getTeams () {
-      this.$http.get('/workplace/teams')
-        .then(res => {
-          this.teams = res.result
-        })
-    },
-    initRadar () {
-      this.radarLoading = true
-
-      this.$http.get('/workplace/radar')
-        .then(res => {
-          const dv = new DataSet.View().source(res.result)
-          dv.transform({
-            type: 'fold',
-            fields: ['个人', '团队', '部门'],
-            key: 'user',
-            value: 'score'
-          })
-
-          this.radarData = dv.rows
-          this.radarLoading = false
         })
     }
   }
