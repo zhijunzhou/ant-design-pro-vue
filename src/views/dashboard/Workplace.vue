@@ -30,7 +30,7 @@
                   <div slot="title">
                     <a href="javascript:;" @click="viewChildren(item)">{{ item.title }}</a>&nbsp;
                   </div>
-                  <div slot="description" v-if="item.data && item.data.length > 0">
+                  <div slot="description" v-if="item.displaytype === '6' && item.data && item.data.length > 0">
                     <a-card
                       v-for="(it, i) in item.data"
                       :key="i"
