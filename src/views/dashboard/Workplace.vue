@@ -25,11 +25,11 @@
               <table class="base-table">
                 <tr>
                   <td class="top">项目名称</td>
-                  <td class="top">{{ dataSource.DevOrg }}</td>
+                  <td class="top">{{ dataSource.Title }}</td>
                 </tr>
                 <tr>
                   <td>建设单位</td>
-                  <td>{{ dataSource.Title }}</td>
+                  <td>{{ dataSource.DevOrg }}</td>
                 </tr>
               </table>
               <a-card
