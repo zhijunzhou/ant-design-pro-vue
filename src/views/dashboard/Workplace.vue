@@ -11,7 +11,7 @@
             :bordered="false"
             :title="finalData.title"
             :body-style="{ padding: 10 }">
-            <div v-if="Array.isArray(dataSource)">
+            <div v-if="Array.isArray(dataSource) && dataSource.length > 0">
               <a-table :columns="dataColumns" :dataSource="dataSource" :pagination="false" bordered>
                 <template slot="name" slot-scope="text">
                   <a href="javascript:;">{{ text }}</a>

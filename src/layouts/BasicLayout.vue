@@ -125,6 +125,8 @@ export default {
         // this.configMenus = tree
         this.menus = tree
         this.nodes = response.result.data.subnodes
+        // 显示默认数据
+        this.UpdateFinalData(this.nodes[0])
       }
     })
     // this.menus = asyncRouterMap.find((item) => item.path === '/').children
