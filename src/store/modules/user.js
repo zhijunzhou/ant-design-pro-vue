@@ -11,7 +11,8 @@ const user = {
     welcome: '',
     avatar: '',
     roles: [],
-    info: {}
+    info: {},
+    finalData: {}
   },
 
   mutations: {
@@ -30,6 +31,9 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    SET_FINAL_DATA: (state, data) => {
+      state.finalData = data
     }
   },
 
@@ -99,6 +103,13 @@ const user = {
     RetrieveMenus ({ commit }) {
       return new Promise((resolve, reject) => {
         retrieveMenus({ 'Code': 'P0001' }).then(resolve).catch(reject)
+      })
+    },
+
+    UpdateFinalData ({ commit }, data) {
+      return new Promise((resolve, reject) => {
+        commit('SET_FINAL_DATA', data)
+        resolve()
       })
     }
 

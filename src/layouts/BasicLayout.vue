@@ -92,7 +92,8 @@ export default {
       isDir: false,
       isEmpty: false,
       selectedKey: undefined,
-      menus: []
+      menus: [],
+      nodes: []
     }
   },
   computed: {
@@ -120,9 +121,10 @@ export default {
     this.RetrieveMenus().then(response => {
       this.spinning = false
       if (response && response.result.code === 'success') {
-        const tree = this.getTree(response.result.data.subnodes)
+        const tree = this.getTree(response.result.data.subnodes, [])
         // this.configMenus = tree
         this.menus = tree
+        this.nodes = response.result.data.subnodes
       }
     })
     // this.menus = asyncRouterMap.find((item) => item.path === '/').children
@@ -141,31 +143,34 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setSidebar', 'RetrieveMenus']),
-    getTree (tree) {
+    ...mapActions(['setSidebar', 'RetrieveMenus', 'UpdateFinalData']),
+    getTree (tree, i, reducer) {
       if (Array.isArray(tree)) {
-        return tree.map(item => {
+        return tree.map((item, index) => {
+          if (index !== i) {
+            reducer = []
+          }
           return {
-            path: this.getPath(item),
+            path: this.getPath(item, reducer),
             name: `workspace${item.level}${item.code}`,
             component: () => import('@/views/dashboard/Workplace'),
             meta: this.getMeta(item),
-            children: this.getChildren(item)
+            children: this.getChildren(item, index, reducer)
           }
         })
       }
     },
-    getPath (item) {
-      const code = item.code.replace(/\./g, '')
-      return `/s${item.level}/l${code}`
+    getPath (item, reducer) {
+      return `${item.level}-${item.parentcode}-${item.code}`
     },
-    getChildren (item) {
+    getChildren (item, index, reducer) {
       if (item.level === 4) {
         return undefined
       }
       if (item.subnodes && item.subnodes.length > 0) {
         if (item.subnodes.filter(it => it.displaytype !== '6').length) {
-          return this.getTree(item.subnodes)
+          reducer.push(item.code)
+          return this.getTree(item.subnodes, index, reducer)
         }
       }
       return undefined
@@ -220,12 +225,32 @@ export default {
             this.isEmpty = true
           }
         }
-        console.log(params)
+        if (!this.isEmpty) {
+          if (!this.isDir) {
+            this.findData(params.key)
+          } else {
+            this.findData(params.selectedKeys.slice(-1)[0])
+          }
+        }
+        // console.log(params)
       }
     },
     findData (key) {
       const arr = key.split('-')
-      console.log(arr)
+      const code = arr[2]
+      this.getNode(code.split('.'))
+    },
+    getNode (arr) {
+      let i = 0
+      let item = null
+      let nodes = this.nodes
+      while (i < arr.length) {
+        item = nodes[+arr[i] - 1]
+        nodes = item.subnodes
+        i++
+      }
+      // console.log('data: ', item.data)
+      this.UpdateFinalData(item)
     },
     drawerClose () {
       this.collapsed = false

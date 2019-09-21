@@ -38,7 +38,7 @@
                       <a>{{ item.title }}</a>
                     </div>
                     <div slot="description" class="card-description">
-                      {{ finalData }}
+                      {{ item.description }}
                     </div>
                   </a-card-meta>
                   <div class="project-item">
@@ -182,8 +182,7 @@ export default {
   computed: {
     ...mapState({
       nickname: (state) => state.user.nickname,
-      welcome: (state) => state.user.welcome,
-      finalData: (state) => state.user.finalData
+      welcome: (state) => state.user.welcome
     }),
     userInfo () {
       return this.$store.getters.userInfo
