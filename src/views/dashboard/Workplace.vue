@@ -27,9 +27,24 @@
             <a-list>
               <a-list-item :key="index" v-for="(item, index) in finalData.subnodes">
                 <a-list-item-meta>
-                  <!-- <a-avatar slot="avatar" /> -->
                   <div slot="title">
                     <a href="javascript:;" @click="viewChildren(item)">{{ item.title }}</a>&nbsp;
+                  </div>
+                  <div slot="description" v-if="item.data && item.data.length > 0">
+                    <a-card
+                      v-for="(it, i) in item.data"
+                      :key="i"
+                      style="width: 240px;display: inline-block;margin-left: 20px;">
+                      <img
+                        :alt="it.name"
+                        :src="it.url"
+                        slot="cover"
+                      />
+                      <a-card-meta
+                        :title="it.name">
+                        <template slot="description">{{ it.datetime }}: {{ it.desc }}</template>
+                      </a-card-meta>
+                    </a-card>
                   </div>
                 </a-list-item-meta>
               </a-list-item>
@@ -57,7 +72,7 @@ export default {
       avatar: '',
       user: {},
       projects: [],
-      loading: true,
+      loading: false,
       radarLoading: true
     }
   },
@@ -111,22 +126,12 @@ export default {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
   },
-  mounted () {
-    this.getProjects()
-  },
   methods: {
     ...mapActions(['UpdateFinalData']),
     viewChildren (item) {
       if (Array.isArray(item.subnodes) && item.subnodes.length > 0) {
         this.UpdateFinalData(item)
       }
-    },
-    getProjects () {
-      this.$http.get('/list/search/projects')
-        .then(res => {
-          this.projects = res.result && res.result.data
-          this.loading = false
-        })
     }
   }
 }
