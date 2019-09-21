@@ -22,7 +22,16 @@
               </template>
             </div>
             <div v-else>
-              <h1>{{ dataSource.DevOrg }}: {{ dataSource.Title }}</h1>
+              <table class="base-table">
+                <tr>
+                  <td class="top">项目名称</td>
+                  <td class="top">{{ dataSource.DevOrg }}</td>
+                </tr>
+                <tr>
+                  <td>建设单位</td>
+                  <td>{{ dataSource.Title }}</td>
+                </tr>
+              </table>
               <a-card
                 v-for="(it, i) in dataSource.Pics"
                 :key="i"
@@ -158,6 +167,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .base-table {
+    margin-left: 20px;
+    margin-bottom: 20px;
+
+    tr {
+      & td.top {
+        border-top: 1px solid #ccc;
+      }
+      td {
+        width: 160px;
+        padding: 15px;
+        border-bottom: 1px solid #ccc;
+      }
+    }
+  }
   .project-list {
 
     .card-title {
