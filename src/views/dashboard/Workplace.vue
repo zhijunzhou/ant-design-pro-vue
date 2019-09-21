@@ -11,7 +11,7 @@
             :bordered="false"
             :title="finalData.title"
             :body-style="{ padding: 10 }">
-            <div>
+            <div v-if="Array.isArray(dataSource)">
               <a-table :columns="dataColumns" :dataSource="dataSource" :pagination="false" bordered>
                 <template slot="name" slot-scope="text">
                   <a href="javascript:;">{{ text }}</a>
@@ -20,6 +20,23 @@
               <template slot="img" slot-scope="img">
                 <img :src="img" width="100" />
               </template>
+            </div>
+            <div v-else>
+              <h1>{{ dataSource.DevOrg }}: {{ dataSource.Title }}</h1>
+              <a-card
+                v-for="(it, i) in dataSource.Pics"
+                :key="i"
+                style="width: 240px;display: inline-block;margin-left: 20px;">
+                <img
+                  :alt="it.name"
+                  :src="it.url"
+                  slot="cover"
+                />
+                <a-card-meta
+                  :title="it.name">
+                  <template slot="description">{{ it.datetime }}: {{ it.desc }}</template>
+                </a-card-meta>
+              </a-card>
             </div>
           </a-card>
           <!-- 当前节点为目录，显示所有目录内容 -->
@@ -115,6 +132,9 @@ export default {
           item.key = String(index)
           return item
         })
+      }
+      if (Object.prototype.toString.call(this.finalData.data) === '[object Object]') {
+        return this.finalData.data
       }
       return []
     },
