@@ -207,32 +207,27 @@ export default {
       return left
     },
     menuSelect (params) {
-      if (!this.isDesktop()) {
-        this.collapsed = false
-      } else {
-        if (params) {
-          if (params.key) {
-            // 选中的是菜单
-            this.isDir = false
-            this.isEmpty = false
-          } else if (params.selectedKeys.length > 0) {
-            // 选中的是目录
-            this.isDir = true
-            this.isEmpty = false
-          } else {
-            // 选中的是空目录
-            this.isDir = true
-            this.isEmpty = true
-          }
+      if (params) {
+        if (params.key) {
+          // 选中的是菜单
+          this.isDir = false
+          this.isEmpty = false
+        } else if (params.selectedKeys.length > 0) {
+          // 选中的是目录
+          this.isDir = true
+          this.isEmpty = false
+        } else {
+          // 选中的是空目录
+          this.isDir = true
+          this.isEmpty = true
         }
-        if (!this.isEmpty) {
-          if (!this.isDir) {
-            this.findData(params.key)
-          } else {
-            this.findData(params.selectedKeys.slice(-1)[0])
-          }
+      }
+      if (!this.isEmpty) {
+        if (!this.isDir) {
+          this.findData(params.key)
+        } else {
+          this.findData(params.selectedKeys.slice(-1)[0])
         }
-        // console.log(params)
       }
     },
     findData (key) {
