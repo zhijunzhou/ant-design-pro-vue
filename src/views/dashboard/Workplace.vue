@@ -32,19 +32,20 @@
                   <td>{{ dataSource.DevOrg }}</td>
                 </tr>
               </table>
-              <div class="img-cards-container">
+              <div class="img-cards-container" v-viewer="{movable: false}">
                 <a-card
                   class="img-card"
                   v-for="(it, i) in dataSource.Pics"
-                  :key="i">
-                  <div v-viewer>
-                    <img
-                      class="img-overview"
-                      :alt="it.name"
-                      :src="it.url"
-                      slot="cover"
-                    />
-                  </div>
+                  :key="i"
+                  @click="show(i)">
+                  <!-- <div v-viewer> -->
+                  <img
+                    class="img-overview"
+                    :alt="it.name"
+                    :src="it.url"
+                    slot="cover"
+                  />
+                  <!-- </div> -->
                   <a-card-meta
                     class="card-desc"
                     :title="it.name">
@@ -63,19 +64,20 @@
                     <a href="javascript:;" @click="viewChildren(item)">{{ item.title }}</a>&nbsp;
                   </div>
                   <div slot="description" v-if="item.displaytype === '6' && item.data && item.data.length > 0">
-                    <div class="img-cards-container">
+                    <div class="img-cards-container" v-viewer="{movable: false}">
                       <a-card
                         class="img-card"
                         v-for="(it, i) in item.data"
-                        :key="i">
-                        <div v-viewer>
-                          <img
-                            class="img-overview"
-                            :alt="it.name"
-                            :src="it.url"
-                            slot="cover"
-                          />
-                        </div>
+                        :key="i"
+                        @click="show(i)">
+                        <!-- <div v-viewer> -->
+                        <img
+                          class="img-overview"
+                          :alt="it.name"
+                          :src="it.url"
+                          slot="cover"
+                        />
+                        <!-- </div> -->
                         <a-card-meta
                           class="card-desc"
                           :title="it.name">
@@ -170,6 +172,9 @@ export default {
   },
   methods: {
     ...mapActions(['UpdateFinalData']),
+    show (i) {
+      console.log(i)
+    },
     viewChildren (item) {
       if (Array.isArray(item.subnodes) && item.subnodes.length > 0) {
         this.UpdateFinalData(item)
@@ -226,6 +231,7 @@ export default {
       }
 
       .img-overview {
+        border-radius: 0;
         width: 200px;
         height: 180px;
         object-fit: cover;
