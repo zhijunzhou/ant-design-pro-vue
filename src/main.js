@@ -2,10 +2,12 @@
 import '@babel/polyfill'
 
 import Vue from 'vue'
+import Viewer from 'v-viewer'
 import App from './App.vue'
 import router from './router'
 import store from './store/'
 import { VueAxios } from './utils/request'
+import 'viewerjs/dist/viewer.css'
 
 // mock
 import './mock'
@@ -18,6 +20,7 @@ import i18n from './locales'
 
 Vue.config.productionTip = false
 
+Vue.use(Viewer)
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)
 
