@@ -16,10 +16,10 @@
                 <template slot="name" slot-scope="text">
                   <a href="javascript:;">{{ text }}</a>
                 </template>
+                <template slot="img" slot-scope="img">
+                  <img :src="img" width="100" />
+                </template>
               </a-table>
-              <template slot="img" slot-scope="img">
-                <img :src="img" width="100" />
-              </template>
             </div>
             <div v-else>
               <table class="base-table">
@@ -36,11 +36,13 @@
                 v-for="(it, i) in dataSource.Pics"
                 :key="i"
                 style="width: 240px;display: inline-block;margin-left: 20px;">
-                <img
-                  :alt="it.name"
-                  :src="it.url"
-                  slot="cover"
-                />
+                <div v-viewer>
+                  <img
+                    :alt="it.name"
+                    :src="it.url"
+                    slot="cover"
+                  />
+                </div>
                 <a-card-meta
                   :title="it.name">
                   <template slot="description">{{ it.datetime }}: {{ it.desc }}</template>
@@ -61,11 +63,13 @@
                       v-for="(it, i) in item.data"
                       :key="i"
                       style="width: 240px;display: inline-block;margin-left: 20px;">
-                      <img
-                        :alt="it.name"
-                        :src="it.url"
-                        slot="cover"
-                      />
+                      <div v-viewer>
+                        <img
+                          :alt="it.name"
+                          :src="it.url"
+                          slot="cover"
+                        />
+                      </div>
                       <a-card-meta
                         :title="it.name">
                         <template slot="description">{{ it.datetime }}: {{ it.desc }}</template>
@@ -118,12 +122,13 @@ export default {
       if (Array.isArray(this.finalData.data) && this.finalData.data.length > 0) {
         const column = this.finalData.data[0]
         return Object.keys(column).map(k => {
-          if (typeof column[k] === 'string' && column[k].toLowerCase().indexOf('.jpg') !== -1) {
+          const regex = /(https?:\/\/.*\.(?:png|jpg))/g
+          if (typeof column[k] === 'string' && regex.test(column[k])) {
             return {
               title: k,
               dataIndex: k,
               customRender: (text, row, index) => {
-                return <img src={text} width="100" />
+                return <div v-viewer><img src={text} width="100" /></div>
               }
             }
           }
