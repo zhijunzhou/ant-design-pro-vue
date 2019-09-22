@@ -193,6 +193,10 @@ export default {
   }
 
   .img-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
     .img-card {
       width: 200px;
       height: 180px;
@@ -200,7 +204,6 @@ export default {
       margin-bottom: 15px;
       margin-right: 15px;
       box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.2);
-      float: left;
 
       /deep/ .ant-card-body {
         padding: 0;
@@ -248,7 +251,7 @@ export default {
         border-top: 1px solid #ccc;
       }
       td {
-        width: 160px;
+        min-width: 160px;
         padding: 15px;
         border-bottom: 1px solid #ccc;
       }
