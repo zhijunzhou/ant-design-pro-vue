@@ -17,7 +17,7 @@
                   <a href="javascript:;">{{ text }}</a>
                 </template>
                 <template slot="img" slot-scope="img">
-                  <img :src="img" width="100" />
+                  <img :src="img" class="img-overview" />
                 </template>
               </a-table>
             </div>
@@ -32,22 +32,26 @@
                   <td>{{ dataSource.DevOrg }}</td>
                 </tr>
               </table>
-              <a-card
-                v-for="(it, i) in dataSource.Pics"
-                :key="i"
-                style="width: 240px;display: inline-block;margin-left: 20px;">
-                <div v-viewer>
-                  <img
-                    :alt="it.name"
-                    :src="it.url"
-                    slot="cover"
-                  />
-                </div>
-                <a-card-meta
-                  :title="it.name">
-                  <template slot="description">{{ it.datetime }}: {{ it.desc }}</template>
-                </a-card-meta>
-              </a-card>
+              <div class="img-cards-container">
+                <a-card
+                  class="img-card"
+                  v-for="(it, i) in dataSource.Pics"
+                  :key="i">
+                  <div v-viewer>
+                    <img
+                      class="img-overview"
+                      :alt="it.name"
+                      :src="it.url"
+                      slot="cover"
+                    />
+                  </div>
+                  <a-card-meta
+                    class="card-desc"
+                    :title="it.name">
+                    <template slot="description">{{ it.desc }}</template>
+                  </a-card-meta>
+                </a-card>
+              </div>
             </div>
           </a-card>
           <!-- 当前节点为目录，显示所有目录内容 -->
@@ -59,22 +63,26 @@
                     <a href="javascript:;" @click="viewChildren(item)">{{ item.title }}</a>&nbsp;
                   </div>
                   <div slot="description" v-if="item.displaytype === '6' && item.data && item.data.length > 0">
-                    <a-card
-                      v-for="(it, i) in item.data"
-                      :key="i"
-                      style="width: 240px;display: inline-block;margin-left: 20px;">
-                      <div v-viewer>
-                        <img
-                          :alt="it.name"
-                          :src="it.url"
-                          slot="cover"
-                        />
-                      </div>
-                      <a-card-meta
-                        :title="it.name">
-                        <template slot="description">{{ it.datetime }}: {{ it.desc }}</template>
-                      </a-card-meta>
-                    </a-card>
+                    <div class="img-cards-container">
+                      <a-card
+                        class="img-card"
+                        v-for="(it, i) in item.data"
+                        :key="i">
+                        <div v-viewer>
+                          <img
+                            class="img-overview"
+                            :alt="it.name"
+                            :src="it.url"
+                            slot="cover"
+                          />
+                        </div>
+                        <a-card-meta
+                          class="card-desc"
+                          :title="it.name">
+                          <template slot="description">{{ it.desc }}</template>
+                        </a-card-meta>
+                      </a-card>
+                    </div>
                   </div>
                 </a-list-item-meta>
               </a-list-item>
@@ -128,7 +136,7 @@ export default {
               title: k,
               dataIndex: k,
               customRender: (text, row, index) => {
-                return <div v-viewer><img src={text} width="100" /></div>
+                return <div v-viewer><img src={text} class="img-overview" /></div>
               }
             }
           }
@@ -172,6 +180,59 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .img-overview {
+    width: 60px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .img-cards-container {
+    .img-card {
+      width: 200px;
+      height: 180px;
+      padding: 0;
+      margin-bottom: 15px;
+      margin-right: 15px;
+      box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.2);
+      float: left;
+
+      /deep/ .ant-card-body {
+        padding: 0;
+
+        .card-desc {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 200px;
+          height: 100px;
+          background: linear-gradient(to top, black, 50%, rgba(0, 0, 0, 0, 0));
+
+          .ant-card-meta-detail {
+            display: flex;
+            flex-direction: column;
+            padding: 50px 15px;
+
+            .ant-card-meta-title {
+              color: white;
+              font-size: 12px;
+            }
+            .ant-card-meta-description {
+              color: white;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      .img-overview {
+        width: 200px;
+        height: 180px;
+        object-fit: cover;
+      }
+    }
+  }
+
   .base-table {
     margin-left: 20px;
     margin-bottom: 20px;
@@ -187,6 +248,7 @@ export default {
       }
     }
   }
+
   .project-list {
 
     .card-title {
