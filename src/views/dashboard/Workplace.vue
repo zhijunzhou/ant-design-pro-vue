@@ -195,7 +195,6 @@ export default {
   .img-cards-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 
     .img-card {
       width: 200px;
@@ -239,6 +238,12 @@ export default {
         height: 180px;
         object-fit: cover;
       }
+    }
+  }
+
+  .mobile {
+    .img-cards-container {
+      justify-content: center;
     }
   }
 
