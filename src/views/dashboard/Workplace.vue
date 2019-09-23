@@ -21,7 +21,7 @@
                 </template>
               </a-table>
             </div>
-            <div v-else>
+            <div v-else-if="finalData.displaytype === '1'">
               <table class="base-table">
                 <tr>
                   <td class="top">项目名称</td>
@@ -126,6 +126,9 @@ export default {
       if (Array.isArray(this.finalData.subnodes) && this.finalData.subnodes.length > 0) {
         return true
       }
+      if (+this.finalData.displaytype >= 7) {
+        return true
+      }
       return false
     },
     dataColumns () {
@@ -176,7 +179,9 @@ export default {
       console.log(i)
     },
     viewChildren (item) {
-      this.UpdateFinalData(item)
+      if (+item.displaytype !== 6) {
+        this.UpdateFinalData(item)
+      }
     }
   }
 }
