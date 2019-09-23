@@ -161,6 +161,9 @@ export default {
           // 显示默认数据
           this.UpdateFinalData(this.nodes[0])
         }
+      }).catch(err => {
+        this.spinning = false
+        console.log(err)
       })
     },
     getTree (tree, i, reducer) {
