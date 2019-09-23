@@ -99,7 +99,8 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      mainMenu: state => state.permission.addRouters,
+      code: (state) => state.user.currentCode
     }),
     contentPaddingLeft () {
       if (!this.fixSidebar || this.isMobile()) {
@@ -114,23 +115,20 @@ export default {
   watch: {
     sidebarOpened (val) {
       this.collapsed = !val
+    },
+    code (val) {
+      this.getMenus(val)
     }
   },
   created () {
-    this.spinning = true
-    this.RetrieveMenus().then(response => {
-      this.spinning = false
+    this.RetrieveProjects().then(response => {
       if (response && response.result.code === 'success') {
-        const tree = this.getTree(response.result.data.subnodes, [])
-        // this.configMenus = tree
-        this.menus = tree
-        this.nodes = response.result.data.subnodes
-        // 显示默认数据
-        this.UpdateFinalData(this.nodes[0])
+        const projects = response.result.data
+        if (Array.isArray(projects) && projects.length > 0) {
+          this.getMenus(projects[0].Code)
+        }
       }
     })
-    // this.menus = asyncRouterMap.find((item) => item.path === '/').children
-    // this.menus = this.mainMenu.find(item => item.path === '/').children
     this.collapsed = !this.sidebarOpened
   },
   mounted () {
@@ -145,7 +143,26 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setSidebar', 'RetrieveMenus', 'UpdateFinalData']),
+    ...mapActions([
+      'setSidebar',
+      'RetrieveMenus',
+      'RetrieveProjects',
+      'UpdateFinalData'
+    ]),
+    getMenus (Code) {
+      this.spinning = true
+      this.RetrieveMenus({ Code }).then(response => {
+        this.spinning = false
+        if (response && response.result.code === 'success') {
+          const tree = this.getTree(response.result.data.subnodes, [])
+          // this.configMenus = tree
+          this.menus = tree
+          this.nodes = response.result.data.subnodes
+          // 显示默认数据
+          this.UpdateFinalData(this.nodes[0])
+        }
+      })
+    },
     getTree (tree, i, reducer) {
       if (Array.isArray(tree)) {
         return tree.map((item, index) => {

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { login, getInfo, logout } from '@/api/login'
-import { retrieveMenus } from '@/api/common'
+import { retrieveMenus, retrieveProjects } from '@/api/common'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
@@ -12,6 +12,8 @@ const user = {
     avatar: '',
     roles: [],
     info: {},
+    currentCode: '',
+    projects: [],
     finalData: {}
   },
 
@@ -31,6 +33,12 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    SET_PROJECTS: (state, projects) => {
+      state.projects = projects
+    },
+    SET_CODE: (state, code) => {
+      state.currentCode = code
     },
     SET_FINAL_DATA: (state, data) => {
       state.finalData = data
@@ -100,9 +108,34 @@ const user = {
     },
 
     // 获取菜单
-    RetrieveMenus ({ commit }) {
+    RetrieveMenus ({ commit }, data) {
       return new Promise((resolve, reject) => {
-        retrieveMenus({ 'Code': 'P0001' }).then(resolve).catch(reject)
+        const defaultProject = { 'Code': 'P0001' }
+        retrieveMenus(data || defaultProject).then(resolve).catch(reject)
+      })
+    },
+
+    RetrieveProjects ({ commit }) {
+      return new Promise((resolve, reject) => {
+        retrieveProjects().then(response => {
+          if (response && response.result.code === 'success') {
+            const projects = response.result.data
+            // projects.push({
+            //   'ID': 'dd23069c-717f-4cd2-9910-173ffa963b74',
+            //   'Code': 'P0002',
+            //   'Title': '示例项目'
+            // })
+            commit('SET_PROJECTS', projects)
+          }
+          resolve(response)
+        }).catch(reject)
+      })
+    },
+
+    UpdateCode ({ commit }, code) {
+      return new Promise((resolve, reject) => {
+        commit('SET_CODE', code)
+        resolve()
       })
     },
 
