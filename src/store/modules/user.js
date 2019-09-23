@@ -120,11 +120,6 @@ const user = {
         retrieveProjects().then(response => {
           if (response && response.result.code === 'success') {
             const projects = response.result.data
-            // projects.push({
-            //   'ID': 'dd23069c-717f-4cd2-9910-173ffa963b74',
-            //   'Code': 'P0002',
-            //   'Title': '示例项目'
-            // })
             commit('SET_PROJECTS', projects)
           }
           resolve(response)

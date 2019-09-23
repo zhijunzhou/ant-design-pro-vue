@@ -125,6 +125,16 @@ export default {
       if (response && response.result.code === 'success') {
         const projects = response.result.data
         if (Array.isArray(projects) && projects.length > 0) {
+          projects.sort((a, b) => {
+            const n1 = +a.Code.substr(1)
+            const n2 = +b.Code.substr(1)
+            if (n1 > n2) {
+              return 1
+            } else if (n1 < n2) {
+              return -1
+            }
+            return 0
+          })
           this.getMenus(projects[0].Code)
         }
       }
