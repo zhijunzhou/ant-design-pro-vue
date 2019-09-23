@@ -176,9 +176,7 @@ export default {
       console.log(i)
     },
     viewChildren (item) {
-      if (Array.isArray(item.subnodes) && item.subnodes.length > 0) {
-        this.UpdateFinalData(item)
-      }
+      this.UpdateFinalData(item)
     }
   }
 }
