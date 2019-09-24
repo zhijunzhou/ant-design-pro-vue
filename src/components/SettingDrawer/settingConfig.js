@@ -5,12 +5,12 @@ import themeColor from './themeColor.js'
 // let lessNodesAppended
 
 const colorList = [
-  {
-    key: '薄暮', color: '#F5222D'
-  },
-  {
-    key: '火山', color: '#FA541C'
-  },
+  // {
+  //   key: '薄暮', color: '#F5222D'
+  // },
+  // {
+  //   key: '火山', color: '#FA541C'
+  // },
   {
     key: '日暮', color: '#FAAD14'
   },
