@@ -18,7 +18,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: '项目规范展示',
+      default: '中建三局一公司信息化平台',
       required: false
     },
     showTitle: {

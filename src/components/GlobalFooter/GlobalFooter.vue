@@ -2,7 +2,7 @@
   <div class="footer">
     <div class="copyright">
       Copyright
-      <a-icon type="copyright" /> 2019 <span>武汉慧友佳华电子</span>
+      <a-icon type="copyright" /> 2019 <span>中建三局一公司</span>
     </div>
   </div>
 </template>

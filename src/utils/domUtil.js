@@ -16,4 +16,4 @@ export const setDocumentTitle = function (title) {
   }
 }
 
-export const domTitle = '项目规范展示'
+export const domTitle = '中建三局一公司信息化平台'
