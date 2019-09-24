@@ -12,7 +12,7 @@
             :title="finalData.title"
             :body-style="{ padding: 10 }">
             <div v-if="Array.isArray(dataSource) && dataSource.length > 0">
-              <a-table :columns="dataColumns" :dataSource="dataSource" :pagination="false" bordered>
+              <a-table :columns="dataColumns" :dataSource="dataSource" :rowClassName="calcRowClass" :pagination="false" bordered>
                 <template slot="name" slot-scope="text">
                   <a href="javascript:;">{{ text }}</a>
                 </template>
@@ -113,6 +113,12 @@ export default {
       avatar: '',
       user: {},
       projects: [],
+      imgColumns: [
+        '法人授权委托书',
+        '工程质量终身责任承诺书',
+        '注册许可证',
+        '证书'
+      ],
       loading: false,
       radarLoading: true
     }
@@ -189,6 +195,19 @@ export default {
       }
       return false
     },
+    isEmptyString (str) {
+      if (str === null || str === undefined) return true
+      if (typeof str === 'string' && str.length === 0) return true
+      return false
+    },
+    calcRowClass (record, index) {
+      for (const p in record) {
+        if (this.imgColumns.indexOf(p) !== -1 && this.isEmptyString(record[p])) {
+          return 'empty-row'
+        }
+      }
+      return ''
+    },
     viewChildren (item) {
       if (+item.displaytype !== 6) {
         this.UpdateFinalData(item)
@@ -201,6 +220,23 @@ export default {
 <style lang="less" scoped>
   a.empty-node {
     color: #FA541C !important;
+  }
+
+  /deep/ .ant-table {
+    tr.empty-row {
+      background: #FA541C;
+      color: #fff;
+
+      td {
+        background: #FA541C;
+        color: #fff;
+      }
+
+      & :hover {
+        background: #FA541C;
+        color: #fff;
+      }
+    }
   }
 
   .img-overview {
