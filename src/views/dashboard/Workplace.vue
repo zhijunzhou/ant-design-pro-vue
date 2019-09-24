@@ -61,7 +61,8 @@
               <a-list-item :key="index" v-for="(item, index) in finalData.subnodes">
                 <a-list-item-meta>
                   <div slot="title">
-                    <a href="javascript:;" @click="viewChildren(item)">{{ item.title }}</a>&nbsp;
+                    <a href="javascript:;" class="empty-node" v-if="isEmptyData(item)">{{ item.title }}</a>
+                    <a href="javascript:;" v-else @click="viewChildren(item)">{{ item.title }}</a>
                   </div>
                   <div slot="description" v-if="item.displaytype === '6' && item.data && item.data.length > 0">
                     <div class="img-cards-container" v-viewer="{movable: false}">
@@ -178,6 +179,16 @@ export default {
     show (i) {
       console.log(i)
     },
+    isEmptyData (item) {
+      if (item.displaytype === '6' || item.displaytype === '7') {
+        if (item.data === null || item.data === undefined) return true
+        if (typeof item.data === 'string' && item.data.length === 0) return true
+        if (Array.isArray(item.data) && item.data.length === 0) {
+          return true
+        }
+      }
+      return false
+    },
     viewChildren (item) {
       if (+item.displaytype !== 6) {
         this.UpdateFinalData(item)
@@ -188,6 +199,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  a.empty-node {
+    color: #FA541C !important;
+  }
+
   .img-overview {
     width: 60px;
     height: 40px;
