@@ -78,7 +78,6 @@ import { timeFix } from '@/utils/util'
 import { mapState, mapActions } from 'vuex'
 import { PageView } from '@/layouts'
 import pdfLogo from '@/assets/pdf.png'
-import wordLogo from '@/assets/word.png'
 import fileLogo from '@/assets/file.png'
 import LDocument from './components/document'
 
@@ -102,8 +101,6 @@ export default {
       ],
       suffixMapping: {
         pdf: pdfLogo,
-        doc: wordLogo,
-        docx: wordLogo,
         file: fileLogo
       },
       loading: false,
@@ -297,6 +294,11 @@ export default {
               font-size: 14px;
             }
           }
+        }
+
+        & a > svg {
+          width: 60px;
+          height: 60px;
         }
       }
 

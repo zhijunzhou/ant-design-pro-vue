@@ -1,5 +1,12 @@
 <script>
+import PdfSvg from '@/assets/pdf.svg?inline'
+import FileSvg from '@/assets/file.svg?inline'
+
 export default {
+  components: {
+    PdfSvg,
+    FileSvg
+  },
   props: {
     item: {
       required: true,
@@ -29,10 +36,10 @@ export default {
             </a-card-meta>
           </div>
         )
-      } else if (this.suffixMapping[suffix]) {
+      } else if (suffixMapping[suffix]) {
         return (
           <div>
-            <a href={item.url} target="_blank"><img src={suffixMapping[suffix]} width="60" height="60" /></a>
+            <a href={item.url} target="_blank"><PdfSvg /></a>
             <a-card-meta
               class="card-desc card-desc-attach"
               title={item.name}>
@@ -43,7 +50,7 @@ export default {
       } else {
         return (
           <div>
-            <a href={item.url} target="_blank"><img src={suffixMapping.file} width="60" height="60" /></a>
+            <a href={item.url} target="_blank"><FileSvg /></a>
             <a-card-meta
               class="card-desc card-desc-attach"
               title={item.name}>
