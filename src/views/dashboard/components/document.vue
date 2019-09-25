@@ -12,7 +12,7 @@ export default {
   },
   render (h) {
     const { item } = this
-    const regex = /(https?:\/\/.*\.(?:png|jpg))/g
+    const regex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/g
 
     if (typeof item.url === 'string' && item.url.length > 0) {
       const suffix = item.url.substr(item.url.lastIndexOf('.') + 1).toLowerCase()

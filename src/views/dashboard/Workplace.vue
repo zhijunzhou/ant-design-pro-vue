@@ -134,7 +134,7 @@ export default {
               title: k,
               dataIndex: k,
               customRender: (text, row, index) => {
-                const regex = /(https?:\/\/.*\.(?:png|jpg))/g
+                const regex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/g
                 if (typeof text === 'string' && text.length > 0) {
                   const suffix = text.substr(text.lastIndexOf('.') + 1).toLowerCase()
                   const suffixMapping = this.suffixMapping
