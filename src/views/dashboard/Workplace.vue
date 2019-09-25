@@ -38,19 +38,7 @@
                   v-for="(it, i) in dataSource.Pics"
                   :key="i"
                   @click="show(i)">
-                  <!-- <div v-viewer> -->
-                  <img
-                    class="img-overview"
-                    :alt="it.name"
-                    :src="it.url"
-                    slot="cover"
-                  />
-                  <!-- </div> -->
-                  <a-card-meta
-                    class="card-desc"
-                    :title="it.name">
-                    <template slot="description">{{ it.desc }}</template>
-                  </a-card-meta>
+                  <l-document :item="it" :suffix-mapping="suffixMapping" />
                 </a-card>
               </div>
             </div>
@@ -71,19 +59,7 @@
                         v-for="(it, i) in item.data"
                         :key="i"
                         @click="show(i)">
-                        <!-- <div v-viewer> -->
-                        <img
-                          class="img-overview"
-                          :alt="it.name"
-                          :src="it.url"
-                          slot="cover"
-                        />
-                        <!-- </div> -->
-                        <a-card-meta
-                          class="card-desc"
-                          :title="it.name">
-                          <template slot="description">{{ it.desc }}</template>
-                        </a-card-meta>
+                        <l-document :item="it" :suffix-mapping="suffixMapping" />
                       </a-card>
                     </div>
                   </div>
@@ -104,11 +80,13 @@ import { PageView } from '@/layouts'
 import pdfLogo from '@/assets/pdf.png'
 import wordLogo from '@/assets/word.png'
 import fileLogo from '@/assets/file.png'
+import LDocument from './components/document'
 
 export default {
   name: 'Workplace',
   components: {
-    PageView
+    PageView,
+    LDocument
   },
   data () {
     return {
@@ -289,6 +267,22 @@ export default {
           height: 100px;
           background: linear-gradient(to top, black, 50%, rgba(0, 0, 0, 0, 0));
 
+          &.card-desc-attach {
+            background: none;
+
+            .ant-card-meta-detail {
+              padding-bottom: 30px;
+
+              .ant-card-meta-title {
+                color: #333;
+              }
+
+              .ant-card-meta-description {
+                color: #333;
+              }
+            }
+          }
+
           .ant-card-meta-detail {
             display: flex;
             flex-direction: column;
@@ -306,7 +300,7 @@ export default {
         }
       }
 
-      .img-overview {
+      /deep/ .img-overview {
         border-radius: 0;
         width: 200px;
         height: 180px;
