@@ -101,6 +101,9 @@
 import { timeFix } from '@/utils/util'
 import { mapState, mapActions } from 'vuex'
 import { PageView } from '@/layouts'
+import pdfLogo from '@/assets/pdf.png'
+import wordLogo from '@/assets/word.png'
+import fileLogo from '@/assets/file.png'
 
 export default {
   name: 'Workplace',
@@ -119,6 +122,12 @@ export default {
         '注册许可证',
         '证书'
       ],
+      suffixMapping: {
+        pdf: pdfLogo,
+        doc: wordLogo,
+        docx: wordLogo,
+        file: fileLogo
+      },
       loading: false,
       radarLoading: true
     }
@@ -142,13 +151,24 @@ export default {
       if (Array.isArray(this.finalData.data) && this.finalData.data.length > 0) {
         const column = this.finalData.data[0]
         return Object.keys(column).map(k => {
-          const regex = /(https?:\/\/.*\.(?:png|jpg))/g
-          if (typeof column[k] === 'string' && regex.test(column[k])) {
+          if (typeof column[k] === 'string' && this.imgColumns.indexOf(k) !== -1) {
             return {
               title: k,
               dataIndex: k,
               customRender: (text, row, index) => {
-                return <div v-viewer><img src={text} class="img-overview" /></div>
+                const regex = /(https?:\/\/.*\.(?:png|jpg))/g
+                if (typeof text === 'string' && text.length > 0) {
+                  const suffix = text.substr(text.lastIndexOf('.') + 1).toLowerCase()
+                  const suffixMapping = this.suffixMapping
+                  if (regex.test(text)) {
+                    return <div v-viewer><img src={text} class="img-overview" /></div>
+                  } else if (this.suffixMapping[suffix]) {
+                    return <a href={text} target="_blank"><img src={suffixMapping[suffix]} class="" width="60" height="60" /></a>
+                  } else {
+                    return <a href={text} target="_blank"><img src={suffixMapping.file} class="" width="60" height="60" /></a>
+                  }
+                }
+                return <div>{text}</div>
               }
             }
           }
