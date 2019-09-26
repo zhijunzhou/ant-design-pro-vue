@@ -39,6 +39,22 @@ export const asyncRouterMap = [
           }
         ]
       },
+      // 排序算法
+      {
+        path: '/sort',
+        name: 'sort',
+        component: PageView,
+        redirect: '/sort/quick-sort',
+        meta: { title: '排序', icon: 'table', permission: [ 'table' ] },
+        children: [
+          {
+            path: '/sort/quick-sort',
+            name: 'QuickSort',
+            component: () => import('@/views/list/StandardList'),
+            meta: { title: '快速排序', keepAlive: true, permission: [ 'table' ] }
+          }
+        ]
+      },
 
       // forms
       {
