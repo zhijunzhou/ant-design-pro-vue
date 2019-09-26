@@ -284,7 +284,7 @@ export default {
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 30px 15px 0 15px;
+            padding: 20px 15px 10px 15px;
 
             .ant-card-meta-title {
               color: white;
