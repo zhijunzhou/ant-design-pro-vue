@@ -246,8 +246,8 @@ export default {
     flex-wrap: wrap;
 
     .img-card {
-      width: 200px;
-      height: 180px;
+      width: 300px;
+      height: 200px;
       padding: 0;
       margin-bottom: 15px;
       margin-right: 15px;
@@ -260,9 +260,9 @@ export default {
           position: absolute;
           bottom: 0;
           left: 0;
-          width: 200px;
+          width: 300px;
           height: 100px;
-          background: linear-gradient(to top, black, 50%, rgba(0, 0, 0, 0, 0));
+          background: linear-gradient(to top, #332, 50%, rgba(0, 0, 0, 0, 0));
 
           &.card-desc-attach {
             background: none;
@@ -283,15 +283,24 @@ export default {
           .ant-card-meta-detail {
             display: flex;
             flex-direction: column;
-            padding: 50px 15px;
+            justify-content: flex-end;
+            padding: 30px 15px 0 15px;
 
             .ant-card-meta-title {
               color: white;
               font-size: 12px;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
             .ant-card-meta-description {
               color: white;
               font-size: 14px;
+              // height: 45px;
+              overflow: hidden;
+              display: -webkit-box;
+              text-overflow: ellipsis;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
             }
           }
         }
@@ -304,8 +313,8 @@ export default {
 
       /deep/ .img-overview {
         border-radius: 0;
-        width: 200px;
-        height: 180px;
+        width: 300px;
+        height: 200px;
         object-fit: cover;
       }
     }
