@@ -39,16 +39,22 @@ export const asyncRouterMap = [
           }
         ]
       },
-      // 排序算法
+      // 实验室
       {
-        path: '/sort',
-        name: 'sort',
-        component: PageView,
-        redirect: '/sort/quick-sort',
-        meta: { title: '排序', icon: 'table', permission: [ 'table' ] },
+        path: '/research',
+        name: 'research',
+        component: RouteView,
+        redirect: '/research/poster-helper',
+        meta: { title: '实验室', icon: 'heart', permission: [ 'table' ] },
         children: [
           {
-            path: '/sort/quick-sort',
+            path: '/research/poster-helper',
+            name: 'PosterHelper',
+            component: () => import('@/views/research/PosterHelper'),
+            meta: { title: '海报编辑器', keepAlive: true, permission: [ 'table' ] }
+          },
+          {
+            path: '/research/quick-sort',
             name: 'QuickSort',
             component: () => import('@/views/list/StandardList'),
             meta: { title: '快速排序', keepAlive: true, permission: [ 'table' ] }
