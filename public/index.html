@@ -23,6 +23,8 @@
           </div>
         </div>
     </div>
+    <script src="https://unpkg.com/babel-standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/babel-plugin-transform-vue-jsx"></script>
     <!-- require cdn assets js -->
     <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
     <script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
