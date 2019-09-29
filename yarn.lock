@@ -2827,7 +2827,7 @@ code-point-at@^1.0.0:
 
 codemirror@^5.49.0:
   version "5.49.0"
-  resolved "https://registry.npm.taobao.org/codemirror/download/codemirror-5.49.0.tgz?cache=0&sync_timestamp=1568963872723&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcodemirror%2Fdownload%2Fcodemirror-5.49.0.tgz#adedbffcc81091e4a0334bcb96b1ae3b7ada5e3f"
+  resolved "https://registry.npm.taobao.org/codemirror/download/codemirror-5.49.0.tgz?cache=0&sync_timestamp=1568963963255&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcodemirror%2Fdownload%2Fcodemirror-5.49.0.tgz#adedbffcc81091e4a0334bcb96b1ae3b7ada5e3f"
   integrity sha1-re2//MgQkeSgM0vLlrGuO3raXj8=
 
 collection-visit@^1.0.0:
