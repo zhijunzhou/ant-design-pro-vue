@@ -11,7 +11,7 @@
             :bordered="false"
             :title="finalData.title"
             :body-style="{ padding: 10 }">
-            <div v-if="Array.isArray(dataSource) && dataSource.length > 0">
+            <div v-if="Array.isArray(dataSource) && dataSource.length > 0" v-viewer="{movable: true}">
               <a-table :columns="dataColumns" :dataSource="dataSource" :rowClassName="calcRowClass" :pagination="false" bordered>
                 <template slot="name" slot-scope="text">
                   <a href="javascript:;">{{ text }}</a>
@@ -136,7 +136,7 @@ export default {
                   const suffix = text.substr(text.lastIndexOf('.') + 1).toLowerCase()
                   const suffixMapping = this.suffixMapping
                   if (regex.test(text)) {
-                    return <div v-viewer><img src={text} class="img-overview" /></div>
+                    return <div><img src={text} class="img-overview" /></div>
                   } else if (this.suffixMapping[suffix]) {
                     return <a href={text} target="_blank"><img src={suffixMapping[suffix]} class="" width="60" height="60" /></a>
                   } else {
