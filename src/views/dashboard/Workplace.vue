@@ -16,9 +16,6 @@
                 <template slot="name" slot-scope="text">
                   <a href="javascript:;">{{ text }}</a>
                 </template>
-                <template slot="img" slot-scope="img">
-                  <img :src="img" class="img-overview" />
-                </template>
               </a-table>
             </div>
             <div v-else-if="finalData.displaytype === '1'">
@@ -197,12 +194,16 @@ export default {
       return false
     },
     calcRowClass (record, index) {
+      let flag = false
       for (const p in record) {
-        if (this.imgColumns.indexOf(p) !== -1 && this.isEmptyString(record[p])) {
-          return 'empty-row'
+        if (this.imgColumns.indexOf(p) !== -1) {
+          flag = true
+          if (!this.isEmptyString(record[p])) {
+            return ''
+          }
         }
       }
-      return ''
+      return flag ? 'empty-row' : ''
     },
     viewChildren (item) {
       if (+item.displaytype !== 6) {
