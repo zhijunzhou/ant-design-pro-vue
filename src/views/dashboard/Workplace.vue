@@ -77,15 +77,17 @@
 import { timeFix } from '@/utils/util'
 import { mapState, mapActions } from 'vuex'
 import { PageView } from '@/layouts'
-import pdfLogo from '@/assets/pdf.png'
-import fileLogo from '@/assets/file.png'
+import PdfSvg from '@/assets/pdf.svg?inline'
+import FileSvg from '@/assets/file.svg?inline'
 import LDocument from './components/document'
 
 export default {
   name: 'Workplace',
   components: {
     PageView,
-    LDocument
+    LDocument,
+    PdfSvg,
+    FileSvg
   },
   data () {
     return {
@@ -100,8 +102,8 @@ export default {
         '证书'
       ],
       suffixMapping: {
-        pdf: pdfLogo,
-        file: fileLogo
+        pdf: true,
+        file: true
       },
       loading: false,
       radarLoading: true
@@ -134,13 +136,12 @@ export default {
                 const regex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/g
                 if (typeof text === 'string' && text.length > 0) {
                   const suffix = text.substr(text.lastIndexOf('.') + 1).toLowerCase()
-                  const suffixMapping = this.suffixMapping
                   if (regex.test(text)) {
                     return <div><img src={text} class="img-overview" /></div>
                   } else if (this.suffixMapping[suffix]) {
-                    return <a href={text} target="_blank"><img src={suffixMapping[suffix]} class="" width="60" height="60" /></a>
+                    return <a href={text} target="_blank"><PdfSvg /></a>
                   } else {
-                    return <a href={text} target="_blank"><img src={suffixMapping.file} class="" width="60" height="60" /></a>
+                    return <a href={text} target="_blank"><FileSvg /></a>
                   }
                 }
                 return <div>{text}</div>
@@ -230,6 +231,14 @@ export default {
       & :hover {
         background: #FA541C;
         color: #fff;
+      }
+    }
+    tr {
+      td {
+        & a > svg {
+          width: 60px;
+          height: 60px;
+        }
       }
     }
   }
