@@ -45,7 +45,7 @@
           </a-card>
           <!-- 当前节点为目录，显示所有目录内容 -->
           <a-card v-else :loading="loading" :title="finalData.title" :bordered="false">
-            <a-list>
+            <a-list v-viewer="{movable: true}">
               <a-list-item :key="index" v-for="(item, index) in finalData.subnodes">
                 <a-list-item-meta>
                   <div slot="title">
@@ -53,7 +53,7 @@
                     <a href="javascript:;" v-else @click="viewChildren(item)">{{ item.title }}</a>
                   </div>
                   <div slot="description" v-if="item.displaytype === '6' && item.data && item.data.length > 0">
-                    <div class="img-cards-container" v-viewer="{movable: false}">
+                    <div class="img-cards-container">
                       <a-card
                         class="img-card"
                         v-for="(it, i) in item.data"
