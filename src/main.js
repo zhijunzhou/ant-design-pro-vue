@@ -2,6 +2,7 @@
 import '@babel/polyfill'
 
 import Vue from 'vue'
+import APlayer from '@moefe/vue-aplayer'
 import App from './App.vue'
 import router from './router'
 import store from './store/'
@@ -20,6 +21,10 @@ Vue.config.productionTip = false
 
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)
+Vue.use(APlayer, {
+  defaultCover: '',
+  productionTip: false
+})
 
 new Vue({
   router,

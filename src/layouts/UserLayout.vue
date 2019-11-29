@@ -24,6 +24,21 @@
         <div class="copyright">
           Copyright &copy; 2018 白鹭学园技术组出品
         </div>
+        <div class="audioWrapper">
+          <div class="audioCon">
+            <i class="close">{{ audio }}</i>
+            <APlayer
+              ref="aplayer"
+              :audio="audio"
+              :lrcType="0"
+              preload="auto"
+              :loop="loop"
+              @pause="pauseAudio"
+              @ended="endAudio"
+              @timeupdate="timeupdateAudio"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -31,6 +46,7 @@
 
 <script>
 import RouteView from './RouteView'
+// import { axios } from '@/utils/request'
 import { mixinDevice } from '@/utils/mixin'
 
 export default {
@@ -38,13 +54,52 @@ export default {
   components: { RouteView },
   mixins: [mixinDevice],
   data () {
-    return {}
+    return {
+      loop: 'none',
+      showAplayer: true,
+      baseUrl: process.env.VUE_APP_API_BASE_URL,
+      audio: {
+        name: '东西（Cover：林俊呈）',
+        artist: '纳豆',
+        url: 'https://cdn.moefe.org/music/mp3/thing.mp3',
+        cover: 'https://p1.music.126.net/5zs7IvmLv7KahY3BFzUmrg==/109951163635241613.jpg?param=300y300', // prettier-ignore
+        lrc: 'https://cdn.moefe.org/music/lrc/thing.lrc'
+      }
+    }
   },
   mounted () {
     document.body.classList.add('userLayout')
+    // this.getAudio()
   },
   beforeDestroy () {
     document.body.classList.remove('userLayout')
+  },
+  methods: {
+    // getAudio () {
+    //   axios({
+    //     method: 'get',
+    //     url: '/file/assets/getaudio'
+    //   }).then(res => {
+    //     if (res.status === 200) {
+    //       this.audio.url = this.baseUrl + res.data.url
+    //     }
+    //   })
+    // },
+    addLog () {
+      // TODO: make some log
+    },
+    pauseAudio () {
+      this.addLog()
+    },
+    endAudio () {
+      this.addLog(1)
+    },
+    timeupdateAudio () {
+      const { media } = this.$refs.aplayer
+      if (media.currentTime && media.duration === media.currentTime) {
+        this.addLog(1)
+      }
+    }
   }
 }
 </script>
